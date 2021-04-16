@@ -59,27 +59,3 @@ if __name__ == "__main__":
     ax.plot(x,feature)
     plt.show()
     #ax.plot(sample_x,sample_point,marker="*")
-    '''
-    train_setX1 = np.arange(100)
-    train_setX2 = np.arange(100)
-    train_setX2 = np.sqrt(train_setX2)
-    train_setX = np.stack([train_setX1,train_setX2])
-
-    train_labels = np.array([1,2])
-    print(train_setX.shape)
-    print(train_labels.shape)
-    ###build neural net###
-
-    model = keras.models.Sequential([
-        keras.layers.Flatten(input_shape=(100,)),
-        keras.layers.Dense(8, activation='relu'),
-        keras.layers.Dense(10, activation='softmax')
-    ])
-
-    model.compile(optimizer='adam', 
-            loss='sparse_categorical_crossentropy',
-            metrics=['accuracy'])
-
-    model.fit(train_setX, train_labels, epochs=5)
-    #model.summary()
-    '''
