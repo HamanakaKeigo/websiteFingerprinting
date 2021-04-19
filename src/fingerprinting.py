@@ -4,15 +4,14 @@ import os
 
 
     
-def get_feature(data_name="../data/test.cap",ip="133.1.138.1"):
+def get_feature(domain="www.osaka-u.ac.jp",data_name="../data/0.pcap",ip="133.1.138.1"):
 
-    #print(data_name)
-    #print(ip)
+
     if not os.path.isfile(data_name):
         return(False)
     data = pyshark.FileCapture(data_name)
     packets = list()
-    feature = [0]
+    
 
     
     for packet in data:
@@ -26,8 +25,12 @@ def get_feature(data_name="../data/test.cap",ip="133.1.138.1"):
     
     spackets = sorted(packets , key=lambda s: s[0])
     
+    '''
+    feature = [0]
     for p in spackets:
         feature.append(feature[-1]+p[1])
+    '''
+    feature = np.array([spackets])
     
 
     return(feature)

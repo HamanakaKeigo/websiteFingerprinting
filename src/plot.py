@@ -5,37 +5,49 @@ import numpy as np
 import os
 
 if __name__ == "__main__":
-    args = sys.argv
-    sites = open("../data/sites",'r')
+    test_epoch = 10
 
-    for site in sites:
-        s = site.split()
-        num=1
-        while os.path.isfile("../data/"+s[0]+"/data"+str(num)+".cap"):
+    with open("../data/sites",'r') as f:
+        sites = f.readlines()
+        for site in sites:
+            s = site.split()
+            Train_dataset = {s[0]:numpy.empty(test_epoch,)}
 
-            feature = fin.get_feature(data_name="../data/"+s[0]+"/data"+str(num)+".cap",ip=s[1])
+
+        for i in rage(test_eopch):
+        #while os.path.isfile("../data/test_data/"+str(num)+".pcap"):
+            for site in sites:
+                numpy.empty()
+                s = site.split()
+                feature = fin.get_feature(domain=s[1],data_name="../data/test_data/"+str(i)+".pcap",ip=s[1])
+
+                Train_dataset[s[0]].append(feature)
+                
+
+        graph = plt.figure()
+        ax = graph.add_subplot(111)
+        
+        for i in range(test_epoch):
+                
 
             x = list(range(len(feature)))
-            s_f = np.array_split(feature,100)
-            s_x = np.array_split(x,100)
-            sample_point = []
-            sample_x=[]
+        '''
+        s_f = np.array_split(feature,100)
+        s_x = np.array_split(x,100)
+        sample_point = []
+        sample_x=[]
 
-            
-            for i in range(100):
-                sample_point.append(s_f[i][-1])
-                sample_x.append(s_x[i][-1])
+        for j in range(100):
+            sample_point.append(s_f[i][-1])
+            sample_x.append(s_x[i][-1])
+        '''
 
-            #print(feature)
-            
-            graph = plt.figure()
-            ax = graph.add_subplot(111)
+        
 
-            ax.plot(x,feature)
+        ax.plot(x,feature)
 
-            ax.plot(sample_x,sample_point,marker="*")
-            #ax.plot(sample_x,sample_point)
+        ax.plot(sample_x,sample_point,marker="*")
+        #ax.plot(sample_x,sample_point)
 
-            plt.savefig("../data/"+s[0]+"/data"+str(num)+".png")
-            plt.show()
-            num+=1
+        plt.savefig("../data/"+s[1]+"/data"+str(num)+".png")
+        plt.show()

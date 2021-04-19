@@ -4,6 +4,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pyshark
 import math
+import time
+
+from selenium import webdriver
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.chrome.options import Options
 
 
 def reshape_data(feature):
@@ -25,11 +30,18 @@ def reshape_data(feature):
 if __name__ == "__main__":
 
     #print(sample_point)
-    data = pyshark.FileCapture("../data/test.cap")
+    #data = pyshark.FileCapture("../data/test.cap")
 
     #print(dir(data[0].tcp))
     #print(data[0].sniff_timestamp)
+    with open("../data/sites",'r') as f:
+        sites = f.readlines()
+        for site in sites:
+            s = site.split()
+            Train_dataset = {s[0]:numpy.empty(test_epoch,)}
+    
 
+    '''
     sample_point = []
     sample_x = []
     packet_size = list()
@@ -59,3 +71,4 @@ if __name__ == "__main__":
     ax.plot(x,feature)
     plt.show()
     #ax.plot(sample_x,sample_point,marker="*")
+    '''
