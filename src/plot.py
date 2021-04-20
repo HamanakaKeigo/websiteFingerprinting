@@ -26,11 +26,12 @@ if __name__ == "__main__":
 
         graph = plt.figure()
         ax = graph.add_subplot(111)
-        
-        for i in range(test_epoch):
-                
 
-            x = list(range(len(feature)))
+        for site in sites:
+            s = site.split()
+            for i in range(test_epoch):
+                x = list(range(len(Train_dataset[s[0]])))
+                ax.plot(x,Train_dataset[s[0]])
         '''
         s_f = np.array_split(feature,100)
         s_x = np.array_split(x,100)
@@ -44,7 +45,7 @@ if __name__ == "__main__":
 
         
 
-        ax.plot(x,feature)
+        
 
         ax.plot(sample_x,sample_point,marker="*")
         #ax.plot(sample_x,sample_point)
