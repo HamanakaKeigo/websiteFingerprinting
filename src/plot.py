@@ -5,24 +5,27 @@ import numpy as np
 import os
 
 if __name__ == "__main__":
-    test_epoch = 10
     Train_dataset = {}
 
     with open("../data/sites",'r') as f:
         sites = f.readlines()
         for site in sites:
             s = site.split()
-            Train_dataset[s[0]] = [None]*test_epoch
+            if s[0] == "#":
+                continue
+
+            
+            Train_dataset[s[0]] = list()
             packets_set = list()
 
+            test_epoch=10
             for i in range(test_epoch):
-                
-                print("get_feature")
-                packets_data = fin.get_feature(domain=s[1],data_name="../data/test_data/"+str(i)+".pcap",ip=s[2])
-                print("end_f")
+                if not os.path.isfile("../data/train/"+str(i)+".pcap"):
+                    break
+                packets_data = fin.get_feature(domain=s[1],data_name="../data/train/"+str(i)+".pcap",ip=s[2])
 
                 #packets_set.append(packets_data)
-                Train_dataset[s[0]][i] = packets_data
+                Train_dataset[s[0]].append(packets_data)
             #print(len(packets_set[0]))
 
             graph = plt.figure()
@@ -37,7 +40,7 @@ if __name__ == "__main__":
                 ax.plot(x,feature)
             #plt.show()
 
-            plt.savefig("../data/test_data/"+str(s[1])+".png")
+            plt.savefig("../data/train/"+str(s[1])+".png")
 
             
         

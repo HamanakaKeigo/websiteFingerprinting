@@ -2,63 +2,68 @@ import tensorflow as tf
 from tensorflow import keras
 import numpy as np
 import matplotlib.pyplot as plt
-
+import fingerprinting as fin
+import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras.models import Model
 import fingerprinting as fin
 
 
 def reshape_data(feature):
-    x = list(range(len(feature)))
-
+    
     s_f = np.array_split(feature,100)
-    s_x = np.array_split(x,100)
-
     sample_point=[]
-    sample_x=[]
     for i in range(100):
         sample_point.append(s_f[i][-1])
-        sample_x.append(s_x[i][-1])
 
-    return(sample_point,sample_x)
-
+    return(sample_point)
 
 
 if __name__ == "__main__":
 
+    model = keras.models.load_model("../data/trained_model")
+    test_size = 10
     sites = open("../data/sites",'r')
-    mnist = tf.keras.datasets.mnist
-    (train_data, train_teacher_labels), (test_data, test_teacher_labels) = mnist.load_data()
-    train_data, test_data = train_data / 255.0, test_data / 255.0
+    
 
-    print(train_data.shape)
-    print(train_teacher_labels.shape)
+    test_sizeset = list()
+    test_featureset = list()
+    test_labels = list()
+    class_num = 0
 
     for site in sites:
+        site_dataset = list()
         s = site.split()
-        feature = fin.get_feature(data_name=s[0],ip=s[1])
-        sample_point,sample_x = reshape_data(feature)
+        if s[0] == "#":
+            continue
 
-        #print(sample_point)
+        for i in range(test_size):
+            f = fin.get_feature(domain=s[1],data_name="../data/test/"+str(i)+".pcap",ip=s[2])
+            print("domain : "+s[1]+" ("+str(i)+"th)"+" ::f.shape = "+str(len(f)))
+            if len(f) < 100:
+                print(str(i)+"th capture contain less than 100 of "+s[1])
+                continue
+            size = [0]
+            feature = [0]
+            for data in f:
+                size.append(size[-1] + abs(data[1]))
+                feature.append(size[-1] + data[1])
+            sample_size = reshape_data(size)
+            sample_feature = reshape_data(feature)
 
-        train_setX1 = np.arange(100)
-        train_setX2 = np.arange(100)
-        train_setX2 = np.sqrt(train_setX2)
-        train_setX = np.stack([train_setX1,train_setX2])
+            test_sizeset.append(sample_size)
+            test_featureset.append(sample_feature)
+            test_labels.append(class_num)
 
-        train_labels = np.array([1,2])
-        print(train_setX.shape)
-        print(train_labels.shape)
-        ###build neural net###
+        class_num+=1
 
-        model = keras.models.Sequential([
-            keras.layers.Flatten(input_shape=(10,)),
-            keras.layers.Dense(8, activation='relu'),
-            keras.layers.Dense(10, activation='softmax')
-        ])
+    ts = np.array(test_sizeset)
+    tf = np.array(test_featureset)
+    tl = np.array(test_labels)
+    ts.reshape(-1,100)
+    tf.reshape(-1,100)
+    tl.reshape(-1,len(ts))
 
-        model.compile(optimizer='adam', 
-              loss='sparse_categorical_crossentropy',
-              metrics=['accuracy'])
-
-        model.fit(train_setX, train_labels, epochs=5)
-        #model.summary()
-        
+    test_loss,test_acc = model.evaluate([ts,tf],tl,verbose=2)
+    print('Test loss    :', test_loss)
+    print('Test accuracy:', test_acc)

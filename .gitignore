@@ -1,3 +1,5 @@
 *.cap
 *.pcap
+*.png
 data/test_data/
+!data/test.pcap
