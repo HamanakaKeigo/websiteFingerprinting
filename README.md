@@ -1,4 +1,4 @@
-# Website Fingerprinting Attackの簡易実装
+# Website Fingerprinting Attackの実装
 
 ## 概要
 実在するサイトにアクセスしたパケットトレースを観測し、トレースのメタ情報からサイトアクセスを推定する。
